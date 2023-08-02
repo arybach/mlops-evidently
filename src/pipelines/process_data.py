@@ -1,7 +1,13 @@
+import sys
+import os
+
+# Get the absolute path to the parent directory of src (which contains config package)
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+sys.path.append(parent_dir)
+
 import pandas as pd
 from pathlib import Path
 from config.config import DATA_COLUMNS
-import os
 
 def process() -> None:
     """Process the datasets for training, validation, and testing."""
