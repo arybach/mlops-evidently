@@ -1,17 +1,17 @@
 ### Streamlit and fastapi based on evidently example https://www.evidentlyai.com/blog/fastapi-tutorial#:~:text=Evidently%20is%20an%20open-source,model%20and%20monitor%20its%20performance
 ![Evidently.ai + FastAPI](static/banner.png "Dashboard preview")
 
-git clone repo_url repo_name
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+''' git clone repo_url repo_name
+''' python -m venv .venv
+''' source .venv/bin/activate
+''' pip install -r requirements.txt
 
 ### to make modules available for import under root run
-python setup.py bdist_wheel
+''' python setup.py bdist_wheel
 
 ### from evidently instructions (can skip export):
-export USER_ID=$(id -u)
-docker-compose up
+''' export USER_ID=$(id -u)
+''' docker-compose up
 
 ### all successful hits to fastapi are stored with autoincremented id in {ModelName}TablePrediction - currently only XGBoost and LinearRegression are supported
 
