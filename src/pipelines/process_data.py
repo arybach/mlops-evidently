@@ -34,7 +34,7 @@ def process() -> None:
     testing_data = pd.read_parquet(testing_path)
 
     # Define numerical features used for training
-    numerical_features = DATA_COLUMNS.num_features
+    numerical_features = DATA_COLUMNS['num_features']
 
     # Process each dataset (training, validation, and testing)
     for dataset, file in zip([training_data, validation_data, testing_data],
