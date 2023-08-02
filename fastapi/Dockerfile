@@ -27,7 +27,7 @@ RUN pip install --no-cache-dir --ignore-installed -r requirements.txt
 # Configure default user name and ID
 ARG USER_ID="1000"
 ENV USER_ID=${USER_ID}
-ENV USER_NAME="fastapi"
+ENV USER_NAME="ec2-user"
 
 RUN useradd -m ${USER_NAME} -u ${USER_ID} && \
     echo "${USER_NAME}:${USER_NAME}" | chpasswd ${USER_NAME} && \

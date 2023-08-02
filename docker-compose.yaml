@@ -30,13 +30,13 @@ services:
       POSTGRES_MAX_CONNECTIONS: "200"  # maximum connection limit here
     container_name: monitoring-db-postgres
     ports:
-    - 5432:5432
+    - localhost:5432:5432
     networks:
       - monitoring
     volumes:
       - monitoring_db_data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -d monitoring_db -U admin" ]
+      test: [ "CMD-SHELL", "pg_isready -d monitoring_db -U ${POSTGRES_USER}" ]
       interval: 10s
       timeout: 5s
       retries: 5
