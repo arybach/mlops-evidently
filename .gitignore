@@ -1,6 +1,6 @@
 data/*
-data/features/*
-data/raw/*
+data/features/*.parquet
+data/raw/*.parquet
 data/reference/*
 build/*
 config/__pycache__
