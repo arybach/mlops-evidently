@@ -1,0 +1,13 @@
+data/*
+data/features/*
+data/raw/*
+data/reference/*
+build/*
+config/__pycache__
+dist/*
+evidently_dojo.egg-info
+evidently_dojo.egg-info/*
+fastapi/__pycache__
+models/*
+reports/*
+src/__pycache__
