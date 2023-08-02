@@ -1,5 +1,9 @@
 import os
 from typing import Dict, Text
+import sys  # Import the sys module
+
+ROOT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, ROOT_PATH)
 
 # Check if .env file exists before loading the environment variables
 if os.path.isfile(".env"):
