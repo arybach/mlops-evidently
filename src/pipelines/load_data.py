@@ -91,9 +91,9 @@ def load_data_from_elasticsearch(index_name: Text) -> dict:
         # Convert the documents to a pandas DataFrame and assign it to the corresponding dataset
         datasets[label] = pd.DataFrame(data)
 
+        os.makedirs(DATA_RAW_DIR, exist_ok=True)
         # Save the dataset to a Parquet file
         file_path = f"{DATA_RAW_DIR}/{label}_data.parquet"
-        file_path.parent.mkdir(parents=True, exist_ok=True)  # Create intermediate directories
         datasets[label].to_parquet(file_path, index=False)
 
         # Print the count of filtered out documents for the current label

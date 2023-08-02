@@ -59,7 +59,7 @@ def prepare_reference_dataset(model_name):
 
     # Save Reference Dataset
     path = REFERENCE_DATA_DIR / f"{model_name}/validation_data.parquet"
-    path.parent.mkdir(parents=True, exist_ok=True)  # Create intermediate directories
+    os.makedirs(f"{REFERENCE_DATA_DIR}/{model_name}", exist_ok=True)
     df.to_parquet(path)
 
     print("Validation Data:")
@@ -67,6 +67,7 @@ def prepare_reference_dataset(model_name):
 
     print("Load testing data")
     path = f"{DATA_FEATURES_DIR}/testing_data.parquet"
+    os.makedirs(f"{DATA_FEATURES_DIR}", exist_ok=True)
     data = pd.read_parquet(path)
     data = data.sample(frac=0.5)
 
@@ -81,7 +82,7 @@ def prepare_reference_dataset(model_name):
 
     # Save Reference Dataset
     path = REFERENCE_DATA_DIR / f"{model_name}/testing_data.parquet"
-    path.parent.mkdir(parents=True, exist_ok=True)  # Create intermediate directories
+    os.makedirs(f"{REFERENCE_DATA_DIR}/{model_name}", exist_ok=True)
     df.to_parquet(path)
 
     print("Testing Data:")
