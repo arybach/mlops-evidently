@@ -50,6 +50,7 @@ def process() -> None:
 
         # Save the processed dataset
         processed_path = Path(DATA_FEATURES_DIR) / file
+        processed_path.parent.mkdir(parents=True, exist_ok=True)  # Create intermediate directories
         dataset.to_parquet(processed_path, index=False)
 
 if __name__ == "__main__":

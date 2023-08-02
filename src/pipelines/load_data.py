@@ -3,6 +3,7 @@ import pandas as pd
 from elasticsearch.helpers import scan
 from tqdm import tqdm
 from elastic import get_elastic_client
+import os
 
 def load_data_from_elasticsearch(index_name: Text) -> dict:
     """Load data from Elasticsearch index.
@@ -92,6 +93,7 @@ def load_data_from_elasticsearch(index_name: Text) -> dict:
 
         # Save the dataset to a Parquet file
         file_path = f"{DATA_RAW_DIR}/{label}_data.parquet"
+        file_path.parent.mkdir(parents=True, exist_ok=True)  # Create intermediate directories
         datasets[label].to_parquet(file_path, index=False)
 
         # Print the count of filtered out documents for the current label
