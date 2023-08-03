@@ -10,7 +10,7 @@ if os.path.isfile(".env"):
     import dotenv
     dotenv.load_dotenv(".env")
 
-host: Text = os.getenv('MONITORING_DB_HOST', 'localhost')
+host: Text = os.getenv('MONITORING_DB_HOST', os.getenv('LOCAL_IP', 'localhost'))
 database_user: Text = os.getenv('POSTGRES_USER', 'admin')
 database_password: Text = os.getenv('POSTGRES_PASSWORD', 'admin')
 
