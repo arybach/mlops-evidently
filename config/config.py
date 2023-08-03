@@ -10,7 +10,7 @@ if os.path.isfile(".env"):
     import dotenv
     dotenv.load_dotenv(".env")
 
-host: Text = os.getenv('MONITORING_DB_HOST', 'monitoring-db-postgres')
+host: Text = os.getenv('MONITORING_DB_HOST', '0.0.0.0')
 database_user: Text = os.getenv('POSTGRES_USER', 'admin')
 database_password: Text = os.getenv('POSTGRES_PASSWORD', 'admin')
 
