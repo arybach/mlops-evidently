@@ -2,6 +2,30 @@ version: "3.9"
 
 services:
 
+  ssl_generator_fastapi:
+    build:
+      context: .
+      dockerfile: fastapi/Dockerfile  # Use the Dockerfile that contains the necessary dependencies for SSL generation
+    image: fastapi_app:latest
+    container_name: fastapi_app_ssl_generator
+    volumes:
+      - ./:/home/evidently-fastapi
+    command: ["./generate_ssl.sh"]  # Run the SSL generation script for Fastapi
+    networks:
+      - monitoring
+
+  ssl_generator_streamlit:
+    build:
+      context: streamlit_app  # Use the context for the Streamlit app directory
+      dockerfile: Dockerfile  # Use the Dockerfile that contains the necessary dependencies for Streamlit
+    image: streamlit_app:latest
+    container_name: streamlit_app
+    volumes:
+      - ./:/home/evidently-fastapi
+    command: ["./generate_ssl.sh"]  # Run the SSL generation script for Streamlit
+    networks:
+      - monitoring
+
   fastapi_app:
     build:
       context: .
