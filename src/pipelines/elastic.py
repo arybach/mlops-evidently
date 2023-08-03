@@ -8,7 +8,7 @@ sys.path.append(parent_dir)
 from elasticsearch import Elasticsearch
 import os
 import ssl
-from config.config import es_local_host, es_password
+from config.config import es_local_host, es_password, es_cloud_host
 
 def get_elastic_client(mode: str ='local'):
     # initialized local or cloud elastic search client
