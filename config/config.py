@@ -39,6 +39,6 @@ index='nutrients'
 # model from hugging face used for vector embeddings - if any 
 model="msmarco"
 # set to ip address of ec2 instance created in mlops-infra/ec2
-es_local_host=os.environ.get("ES_LOCAL_HOST")
+es_local_host=os.environ.get("ES_LOCAL_HOST", "localhost")
 es_cloud_host=''
-es_password=os.environ.get("ES_PASSWORD")
+es_password=os.environ.get("ES_PASSWORD", "elasticsearchme")
