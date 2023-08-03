@@ -3,14 +3,13 @@ version: "3.9"
 services:
 
   ssl_generator_fastapi:
-    build:
-      context: .
-      dockerfile: fastapi/Dockerfile  # Use the Dockerfile that contains the necessary dependencies for SSL generation
     image: fastapi_app:latest
-    container_name: fastapi_app_ssl_generator
+    container_name: fastapi_ssl_generator
+    depends_on: 
+      - fastapi_app
     volumes:
       - ./:/home/evidently-fastapi
-    command: ["./generate_ssl.sh"]  # Run the SSL generation script for Fastapi
+    command: ["./generate_ssl_fastapi.sh"]  # Run the SSL generation script for Fastapi
     networks:
       - monitoring
 
@@ -19,10 +18,23 @@ services:
       context: streamlit_app  # Use the context for the Streamlit app directory
       dockerfile: Dockerfile  # Use the Dockerfile that contains the necessary dependencies for Streamlit
     image: streamlit_app:latest
-    container_name: streamlit_app
+    container_name: streamlit_ssl_generator
+    depends_on: 
+      - streamlit_app
     volumes:
       - ./:/home/evidently-fastapi
-    command: ["./generate_ssl.sh"]  # Run the SSL generation script for Streamlit
+    command: ["./generate_ssl_streamlit.sh"]  # Run the SSL generation script for Streamlit
+    networks:
+      - monitoring
+
+  ssl_generator_postgres:
+    image: postgres:15.2-alpine
+    container_name: postgres_ssl_generator
+    depends_on: 
+      - monitoring-db
+    volumes:
+      - ./:/scripts
+    command: ["/scripts/generate_ssl_postgres.sh"]  # Run the SSL generation script for Postgres
     networks:
       - monitoring
 
@@ -41,6 +53,8 @@ services:
       - "MONITORING_DB_HOST=monitoring-db-postgres"
       - "POSTGRES_USER=${POSTGRES_USER}"
       - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
+      - "SSL_CERT_PATH=/home/evidently-fastapi/tls/certs/fastapi/server.crt"
+      - "SSL_KEY_PATH=/home/evidently-fastapi/tls/certs/fastapi/server.key"
     ports:
       - 5000:5000
     networks:
@@ -54,6 +68,9 @@ services:
       POSTGRES_DB: "monitoring_db"
       PGDATA: "/var/lib/postgresql/data/pgdata"
       POSTGRES_MAX_CONNECTIONS: "200"  # maximum connection limit here
+      POSTGRES_SSL: "on"
+      POSTGRES_SSL_CERT_FILE: /home/evidently-fastapi/tls/certs/postgres/server.crt
+      POSTGRES_SSL_KEY_FILE: /home/evidently-fastapi/tls/certs/postgres/server.key
     container_name: monitoring-db-postgres
     ports:
     - 5432:5432
@@ -61,6 +78,7 @@ services:
       - monitoring
     volumes:
       - monitoring_db_data:/var/lib/postgresql/data
+      - ./:/scripts
       # - ./sql:/docker-entrypoint-initdb.d  # Mount the SQL script as an initialization script to create new user and grant priveleges
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d monitoring_db -U ${POSTGRES_USER}" ]
@@ -79,6 +97,8 @@ services:
       - ./:/home/evidently-fastapi
     environment:
       - FASTAPI_APP_HOST=fastapi_app
+      - "SSL_CERT_PATH=/home/evidently-fastapi/tls/certs/streamlit/server.crt"
+      - "SSL_KEY_PATH=/home/evidently-fastapi/tls/certs/streamlit/server.key"
     ports:
       - 8501:8501
     networks:

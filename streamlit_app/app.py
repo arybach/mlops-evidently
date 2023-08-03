@@ -13,13 +13,21 @@ from streamlit_app.utils.ui import (
 
 
 if __name__ == '__main__':
-
     # Configure some styles
     set_page_container_style()
     # Sidebar: Logo and links
     display_sidebar_header()
+
+    # Get the SSL certificate and key paths from environment variables
+    ssl_cert_path = os.getenv("SSL_CERT_PATH")
+    ssl_key_path = os.getenv("SSL_KEY_PATH")
+
+    # Check if SSL certificates and keys are available
+    use_https = ssl_cert_path is not None and ssl_key_path is not None
+    scheme = "https" if use_https else "http"
+
     host: Text = os.getenv('FASTAPI_APP_HOST', 'localhost')
-    base_route: Text = f'http://{host}:5000'
+    base_route: Text = f'{scheme}://{host}:8501'
 
     try:
         window_size: int = st.sidebar.number_input(

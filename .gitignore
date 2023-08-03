@@ -11,3 +11,4 @@ fastapi/__pycache__
 models/*
 reports/*
 src/__pycache__
+tls/*
