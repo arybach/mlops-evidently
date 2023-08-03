@@ -14,7 +14,7 @@ services:
     volumes:
       - ./:/home/evidently-fastapi
     environment:
-      - MONITORING_DB_HOST=monitoring-db
+      - "MONITORING_DB_HOST=${LOCAL_IP}"
     ports:
       - 5000:5000
     networks:
@@ -30,7 +30,7 @@ services:
       POSTGRES_MAX_CONNECTIONS: "200"  # maximum connection limit here
     container_name: monitoring-db-postgres
     ports:
-    - localhost:5432:5432
+    - "${LOCAL_IP}:5432:5432"
     networks:
       - monitoring
     volumes:
