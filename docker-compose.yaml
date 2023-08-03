@@ -14,7 +14,7 @@ services:
     volumes:
       - ./:/home/evidently-fastapi
     environment:
-      - "MONITORING_DB_HOST=localhost"
+      - "MONITORING_DB_HOST=monitoring-db-postgres"
     ports:
       - 5000:5000
     networks:
