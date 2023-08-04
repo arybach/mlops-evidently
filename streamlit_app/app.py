@@ -27,7 +27,7 @@ if __name__ == '__main__':
     # scheme = "https" if use_https else "http"
     # use http as ec2 instance is not configured with ssl and streamlit on public ip will error out
     scheme = "http"
-    host: Text = os.getenv('FASTAPI_APP_HOST', 'localhost')
+    host: Text = os.getenv('FASTAPI_APP_HOST', 'fastapi_app')
     base_route: Text = f'{scheme}://{host}:8501'
 
     try:
