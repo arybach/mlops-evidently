@@ -28,7 +28,7 @@ if __name__ == '__main__':
     # use http as ec2 instance is not configured with ssl and streamlit on public ip will error out
     scheme = "http"
     host: Text = os.getenv('FASTAPI_APP_HOST', 'fastapi_app')
-    base_route: Text = f'{scheme}://{host}:8501'
+    base_route: Text = f'{scheme}://{host}:5000'
 
     try:
         window_size: int = st.sidebar.number_input(
