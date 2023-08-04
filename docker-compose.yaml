@@ -2,18 +2,18 @@ version: "3.9"
 
 services:
 
-  ssl_generator:
-    build:
-      context: .
-      dockerfile: fastapi/Dockerfile
-      args:
-        USER_ID: ${USER_ID:-1000}
-    container_name: ssl_generator
-    volumes:
-      - ./:/home/evidently-fastapi
-    command: ["./generate_ssl.sh"]  # Run the SSL generation script for Fastapi and Streamlit
-    networks:
-      - monitoring
+  # ssl_generator:
+  #   build:
+  #     context: .
+  #     dockerfile: fastapi/Dockerfile
+  #     args:
+  #       USER_ID: ${USER_ID:-1000}
+  #   container_name: ssl_generator
+  #   volumes:
+  #     - ./:/home/evidently-fastapi
+  #   command: ["./generate_ssl.sh"]  # Run the SSL generation script for Fastapi and Streamlit
+  #   networks:
+  #     - monitoring
 
   fastapi_app:
     build:
@@ -30,8 +30,8 @@ services:
       - "MONITORING_DB_HOST=monitoring-db-postgres"
       - "POSTGRES_USER=${POSTGRES_USER}"
       - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
-      - "SSL_CERT_PATH=/home/evidently-fastapi/tls/certs/fastapi/server.crt"
-      - "SSL_KEY_PATH=/home/evidently-fastapi/tls/certs/fastapi/server.key"
+      # - "SSL_CERT_PATH=/home/evidently-fastapi/tls/certs/fastapi/server.crt"
+      # - "SSL_KEY_PATH=/home/evidently-fastapi/tls/certs/fastapi/server.key"
     ports:
       - 5000:5000
     networks:
@@ -72,8 +72,8 @@ services:
       - ./:/home/evidently-fastapi
     environment:
       - FASTAPI_APP_HOST=fastapi_app
-      - "SSL_CERT_PATH=/home/evidently-fastapi/tls/certs/streamlit/server.crt"
-      - "SSL_KEY_PATH=/home/evidently-fastapi/tls/certs/streamlit/server.key"
+      # - "SSL_CERT_PATH=/home/evidently-fastapi/tls/certs/streamlit/server.crt"
+      # - "SSL_KEY_PATH=/home/evidently-fastapi/tls/certs/streamlit/server.key"
     ports:
       - 8501:8501
     networks:
