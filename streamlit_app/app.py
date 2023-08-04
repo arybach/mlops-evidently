@@ -23,9 +23,10 @@ if __name__ == '__main__':
     ssl_key_path = os.getenv("SSL_KEY_PATH")
 
     # Check if SSL certificates and keys are available
-    use_https = ssl_cert_path is not None and ssl_key_path is not None
-    scheme = "https" if use_https else "http"
-
+    # use_https = ssl_cert_path is not None and ssl_key_path is not None
+    # scheme = "https" if use_https else "http"
+    # use http as ec2 instance is not configured with ssl and streamlit on public ip will error out
+    scheme = "http"
     host: Text = os.getenv('FASTAPI_APP_HOST', 'localhost')
     base_route: Text = f'{scheme}://{host}:8501'
 

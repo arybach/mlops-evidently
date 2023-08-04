@@ -2,39 +2,16 @@ version: "3.9"
 
 services:
 
-  ssl_generator_fastapi:
-    image: fastapi_app:latest
-    container_name: fastapi_ssl_generator
-    depends_on: 
-      - fastapi_app
-    volumes:
-      - ./:/home/evidently-fastapi
-    command: ["./generate_ssl_fastapi.sh"]  # Run the SSL generation script for Fastapi
-    networks:
-      - monitoring
-
-  ssl_generator_streamlit:
+  ssl_generator:
     build:
-      context: streamlit_app  # Use the context for the Streamlit app directory
-      dockerfile: Dockerfile  # Use the Dockerfile that contains the necessary dependencies for Streamlit
-    image: streamlit_app:latest
-    container_name: streamlit_ssl_generator
-    depends_on: 
-      - streamlit_app
+      context: .
+      dockerfile: fastapi/Dockerfile
+      args:
+        USER_ID: ${USER_ID:-1000}
+    container_name: ssl_generator
     volumes:
       - ./:/home/evidently-fastapi
-    command: ["./generate_ssl_streamlit.sh"]  # Run the SSL generation script for Streamlit
-    networks:
-      - monitoring
-
-  ssl_generator_postgres:
-    image: postgres:15.2-alpine
-    container_name: postgres_ssl_generator
-    depends_on: 
-      - monitoring-db
-    volumes:
-      - ./:/scripts
-    command: ["/scripts/generate_ssl_postgres.sh"]  # Run the SSL generation script for Postgres
+    command: ["./generate_ssl.sh"]  # Run the SSL generation script for Fastapi and Streamlit
     networks:
       - monitoring
 
@@ -59,7 +36,7 @@ services:
       - 5000:5000
     networks:
       - monitoring
-
+ 
   monitoring-db:
     image: postgres:15.2-alpine
     environment:
@@ -68,18 +45,16 @@ services:
       POSTGRES_DB: "monitoring_db"
       PGDATA: "/var/lib/postgresql/data/pgdata"
       POSTGRES_MAX_CONNECTIONS: "200"  # maximum connection limit here
-      POSTGRES_SSL: "on"
-      POSTGRES_SSL_CERT_FILE: /home/evidently-fastapi/tls/certs/postgres/server.crt
-      POSTGRES_SSL_KEY_FILE: /home/evidently-fastapi/tls/certs/postgres/server.key
     container_name: monitoring-db-postgres
+    restart: unless-stopped
     ports:
-    - 5432:5432
+      - 5432:5432
     networks:
       - monitoring
     volumes:
       - monitoring_db_data:/var/lib/postgresql/data
-      - ./:/scripts
       # - ./sql:/docker-entrypoint-initdb.d  # Mount the SQL script as an initialization script to create new user and grant priveleges
+    # command: ["/usr/local/bin/docker-entrypoint.sh", "postgres", "-c", "ssl=on", "-c", "ssl_cert_file=/var/lib/postgresql/server/server.crt", "-c", "ssl_key_file=/var/lib/postgresql/server/server.key"]
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d monitoring_db -U ${POSTGRES_USER}" ]
       interval: 10s
@@ -106,7 +81,6 @@ services:
 
 volumes:
     monitoring_db_data: {}
-
 
 networks:
   monitoring:
