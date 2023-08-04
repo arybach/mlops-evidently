@@ -29,12 +29,12 @@ from src.utils.reports import (
 )
 from utils import ModelLoader
 
-# Get the SSL certificate and key paths from environment variables
-ssl_cert_path = os.getenv("SSL_CERT_PATH")
-ssl_key_path = os.getenv("SSL_KEY_PATH")
+# # Get the SSL certificate and key paths from environment variables
+# ssl_cert_path = os.getenv("SSL_CERT_PATH")
+# ssl_key_path = os.getenv("SSL_KEY_PATH")
 
-# Check if SSL certificates and keys are available
-use_https = ssl_cert_path is not None and ssl_key_path is not None
+# # Check if SSL certificates and keys are available
+# use_https = ssl_cert_path is not None and ssl_key_path is not None
 
 logging.basicConfig(
     level=logging.INFO,
@@ -51,15 +51,15 @@ app = FastAPI()
 def index() -> HTMLResponse:
     return HTMLResponse('<h1><i>Evidently + FastAPI</i></h1>')
 
-# Define the use_ssl_scheme middleware class
-class SSLMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next):
-        if use_https:
-            request.scope["scheme"] = "https"
-        return await call_next(request)
+# # Define the use_ssl_scheme middleware class
+# class SSLMiddleware(BaseHTTPMiddleware):
+#     async def dispatch(self, request: Request, call_next):
+#         if use_https:
+#             request.scope["scheme"] = "https"
+#         return await call_next(request)
 
-# Apply the SSLMiddleware to the FastAPI app
-app.add_middleware(SSLMiddleware)
+# # Apply the SSLMiddleware to the FastAPI app
+# app.add_middleware(SSLMiddleware)
 
 @app.post('/predict/{model_name}')
 def predict(
