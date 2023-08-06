@@ -8,6 +8,7 @@ import logging
 from typing import Callable, Text
 
 from evidently import ColumnMapping
+from fastapi.responses import FileResponse
 from fastapi import FastAPI, BackgroundTasks, Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import (
@@ -135,3 +136,7 @@ def monitor_target_drift(model_name: str, window_size: int = 3000) -> FileRespon
 
     logging.info('Return report as html')
     return FileResponse(report_path)
+
+@app.get('/download-file')
+def download_file():
+    return FileResponse('file_path')
