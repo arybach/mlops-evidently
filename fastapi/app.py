@@ -137,6 +137,6 @@ def monitor_target_drift(model_name: str, window_size: int = 3000) -> FileRespon
     logging.info('Return report as html')
     return FileResponse(report_path)
 
-@app.get('/download-file')
-def download_file():
-    return FileResponse('file_path')
+@app.get('/download-file/{file_path}')
+def download_file(file_path:str):
+    return FileResponse(file_path)
